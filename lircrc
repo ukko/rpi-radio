@@ -1,0 +1,123 @@
+###
+### ~/.lircrc
+###
+begin irexec
+
+# проговариваем время
+begin
+	button  = KEY_FN_1
+	prog    = irexec
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --info=time
+end
+
+begin
+	button  = KEY_FN_2
+	prog    = irexec
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --sleep=45
+end
+
+# Говорим название канала
+begin
+	prog    = irexec
+	button  = KEY_CHANNEL
+	config  = /home/pi/rpi-radio/rpi-radio.sh radio
+end
+
+# Переключение треков
+begin
+	button  = KEY_NEXT
+	prog    = irexec
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --track=next
+end
+
+begin
+	button  = KEY_PREVIOUS
+	prog    = irexec
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --track=prev
+end
+
+# PLAY / PAUSE
+begin
+	button  = KEY_PLAYPAUSE
+	prog    = irexec
+	repeat  = 0
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --track=stop_play
+end
+
+# Громкость
+begin
+	button  = KEY_VOLUMEUP
+	prog    = irexec
+	repeat  = 2
+	config  = mpc volume +5 && ogg123 /home/pi/rpi-radio/stereo/audio-volume-change.ogg
+end
+
+begin
+	button  = KEY_VOLUMEDOWN
+	prog    = irexec
+	repeat  = 2
+	config  = mpc volume -5 && ogg123 /home/pi/rpi-radio/stereo/audio-volume-change.ogg
+end
+
+# Переходим на канал и говорим название станции
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_1
+	config  = mpc play 1 && /home/pi/rpi-radio/rpi-radio.sh radio 1
+end
+
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_2
+	config  = mpc play 2 && /home/pi/rpi-radio/rpi-radio.sh radio 2
+end
+
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_3
+	config  = mpc play 3 && /home/pi/rpi-radio/rpi-radio.sh radio 3
+end
+
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_4
+	config  = mpc play 4 && /home/pi/rpi-radio/rpi-radio.sh radio 4
+end
+
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_5
+	config  = mpc play 5 && /home/pi/rpi-radio/rpi-radio.sh radio 5
+end
+
+begin
+	prog    = irexec
+	button  = KEY_6
+	config  = mpc play 6 && /home/pi/rpi-radio/rpi-radio.sh radio 6
+end
+
+begin
+	prog    = irexec
+	button  = KEY_7
+	config  = mpc play 7 && /home/pi/rpi-radio/rpi-radio.sh radio 7
+end
+
+begin
+	prog    = irexec
+	button  = KEY_8
+	config  = mpc play 8 && /home/pi/rpi-radio/rpi-radio.sh radio 8
+end
+
+begin
+	prog    = irexec
+	button  = KEY_9
+	config  = mpc play 9 && /home/pi/rpi-radio/rpi-radio.sh radio 9
+end
+
+begin
+	prog    = irexec
+	button  = KEY_0
+	config  = mpc play 10 && /home/pi/rpi-radio/rpi-radio.sh radio 10
+end
+
+end irexec
