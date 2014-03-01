@@ -10,8 +10,16 @@ begin
 	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --info=time
 end
 
+# проговариваем текущую композицию
 begin
 	button  = KEY_FN_2
+	prog    = irexec
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --info=track
+end
+
+# установка / снятие таймера выключения
+begin
+	button  = KEY_EQUAL
 	prog    = irexec
 	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --sleep=45
 end
@@ -60,64 +68,65 @@ begin
 end
 
 # Переходим на канал и говорим название станции
+
+begin
+	prog    = irexec
+	button  = KEY_NUMERIC_0
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=0
+end
+
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_1
-	config  = mpc play 1 && /home/pi/rpi-radio/rpi-radio.sh radio 1
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=1
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_2
-	config  = mpc play 2 && /home/pi/rpi-radio/rpi-radio.sh radio 2
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=2
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_3
-	config  = mpc play 3 && /home/pi/rpi-radio/rpi-radio.sh radio 3
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=3
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_4
-	config  = mpc play 4 && /home/pi/rpi-radio/rpi-radio.sh radio 4
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=4
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_5
-	config  = mpc play 5 && /home/pi/rpi-radio/rpi-radio.sh radio 5
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=5
 end
 
 begin
 	prog    = irexec
 	button  = KEY_6
-	config  = mpc play 6 && /home/pi/rpi-radio/rpi-radio.sh radio 6
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=6
 end
 
 begin
 	prog    = irexec
 	button  = KEY_7
-	config  = mpc play 7 && /home/pi/rpi-radio/rpi-radio.sh radio 7
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=7
 end
 
 begin
 	prog    = irexec
 	button  = KEY_8
-	config  = mpc play 8 && /home/pi/rpi-radio/rpi-radio.sh radio 8
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=8
 end
 
 begin
 	prog    = irexec
 	button  = KEY_9
-	config  = mpc play 9 && /home/pi/rpi-radio/rpi-radio.sh radio 9
-end
-
-begin
-	prog    = irexec
-	button  = KEY_0
-	config  = mpc play 10 && /home/pi/rpi-radio/rpi-radio.sh radio 10
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=9
 end
 
 end irexec

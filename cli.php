@@ -22,8 +22,10 @@ $mpg = '/usr/bin/mpg123';
  * cli.php --track=next         следующий трек
  * cli.php --track=prev         предыдущие трек
  * cli.php --track=stop_play    остановить проигрывание или запустить
- * cli.php --info=time          текущее время
- * cli.php --sleep=30m
+ * cli.php --play=<NUM>         воспроизвести трек по номеру
+ * cli.php --info=time          произнести текущее время
+ * cli.php --info=track         произнести текущий трек
+ * cli.php --sleep=30           поставить таймер выключения, на указанное количество минут
  */
 
 $mpd    = new Client('127.0.0.1');
@@ -33,7 +35,8 @@ $params = array(
     't:'    => 'track:',
     'c:'    => 'channel:',
     'i:'    => 'info:',
-    's'     => 'sleep:'
+    's:'    => 'sleep:',
+    'p:'    => 'play:',
 );
 
 $options = getopt(implode('', array_keys($params)), $params);
@@ -57,6 +60,76 @@ if (isset($options['track']) || isset($options['t'])) {
         }
     }
 
+    nowPlaying($mpd, $mpg, $status, $playlist);
+}
+
+if (isset($options['info']) || isset($options['i'])) {
+    $info   = isset( $options['info'] ) ? $options['info'] : $options['i'];
+
+    if ($info === 'time') {
+        $string = getTime();
+        $file   = realpath(__DIR__ . '/cache/time.mp3');
+        loadVoice($string, 'ru', $file);
+        if ($status['state'] === 'play') {
+            $mpd->stop();
+        }
+        system(sprintf('%s %s &', $mpg, $file));
+        if ($status['state'] === 'play') {
+            $mpd->play();
+        }
+    } else if ($info === 'track') {
+         if ($status['state'] === 'play') {
+            $mpd->stop();
+            $title = $mpd->currentSong('title');
+            if ($title) {
+                $file   = __DIR__ . '/cache/current_song.mp3';
+                loadVoice($title, 'en', $file);
+                system(sprintf('%s %s &', $mpg, $file));
+            }
+            $mpd->play();
+         }
+    }
+
+}
+
+if (isset($options['sleep']) || isset($options['s'])) {
+    exec('/usr/bin/atq -q s', $jobs);
+
+    if (count($jobs)) {
+
+        foreach($jobs as $jobs) {
+            $num = explode("\t", $jobs);
+            exec(sprintf('/usr/bin/atrm %s', $num[0]));
+        }
+
+        $file = __DIR__ . '/cache/sleep_off.mp3';
+        if (! file_exists($file)) {
+            $string = 'Выключен таймер спящего режима';
+            loadVoice($string, 'ru', $file);
+        }
+        system(sprintf('%s %s &', $mpg, $file));
+        return;
+    }
+
+    $sleep      = isset($options['sleep']) ? $options['sleep'] : $options['s'];
+    $command    = '/usr/bin/at now +%s min -q s -f /home/pi/rpi-radio/sleep.sh';
+    $res        = system(sprintf($command, $sleep));
+
+    $file = __DIR__ . '/cache/sleep_on_' . $sleep . '.mp3';
+    if (! file_exists($file)) {
+        $string = sprintf('Включен таймер спящего режима на %s %s', $sleep, plural_form($sleep, ['минута', 'минуты', 'минут']));
+        loadVoice($string, 'ru', $file);
+    }
+    system(sprintf('%s %s &', $mpg, $file));
+}
+
+if (isset($options['play']) || isset($options['p'])) {
+    $position   = isset($options['play']) ? $options['play'] : $options['p'];
+    $mpd->play($position);
+    nowPlaying($mpd, $mpg, $status, $playlist);
+}
+
+function nowPlaying($mpd, $mpg, $status, $playlist) {
     $radio      = $playlist[(int)$mpd->status('song')];
     $file       = __DIR__ . '/cache/radio_' . md5($radio[0]);
     if (! file_exists($file)) {
@@ -73,57 +146,11 @@ if (isset($options['track']) || isset($options['t'])) {
     }
 }
 
-if (isset($options['info']) || isset($options['i'])) {
-    $info   = isset( $options['info'] ) ? $options['info'] : $options['i'];
-
-    if ($info === 'time') {
-        $string = getTime();
-        $file   = realpath(__DIR__ . '/cache/time.mp3');
-        loadVoice($string, 'ru', $file);
-        if ($status['state'] === 'play') {
-            $mpd->stop();
-        }
-        system(sprintf('%s %s &', $mpg, $file));
-
-        if ($status['state'] === 'play') {
-            $title = $mpd->currentSong('title');
-            if ($title) {
-                $file   = __DIR__ . '/cache/now_playing.mp3';
-                loadVoice($title, 'en', $file);
-                system(sprintf('%s %s &', $mpg, $file));
-            }
-
-            $mpd->play();
-        }
-    }
-
-}
-
-if (isset($options['sleep']) || isset($options['s'])) {
-    $sleep      = isset($options['sleep']) ? $options['sleep'] : $options['s'];
-    $command    = '/usr/bin/at now +%s min -f /home/pi/rpi-radio/sleep.sh';
-    $res        = system(sprintf($command, $sleep));
-
-    file_put_contents('/tmp/sleep', var_export([date('c'), $res], 1), FILE_APPEND);
-
-    $file = __DIR__ . '/cache/sleep_on_' . $sleep . '.mp3';
-    if (! file_exists($file)) {
-        $string = sprintf('Установлен таймер на %s %s', $sleep, plural_form($sleep, ['минута', 'минуты', 'минут']));
-        loadVoice($string, 'ru', $file);
-    }
-    system(sprintf('%s %s &', $mpg, $file));
-    file_put_contents(__DIR__ . '/tmp', sprintf($command, $sleep));
-}
-
 function getTime() {
     $hour   = date('H');
     $minute = date('i');
     return sprintf('%d %s %d %s', $hour, plural_form($hour, ['час', 'часа', 'часов']),
         $minute, plural_form($minute, ['минута', 'минуты', 'минут']));
-}
-
-function nowPlaying() {
-
 }
 
 function plural_form($n, $forms) {
