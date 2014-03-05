@@ -57,14 +57,14 @@ begin
 	button  = KEY_VOLUMEUP
 	prog    = irexec
 	repeat  = 2
-	config  = mpc volume +5 && ogg123 /home/pi/rpi-radio/stereo/audio-volume-change.ogg
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --volume=up
 end
 
 begin
 	button  = KEY_VOLUMEDOWN
 	prog    = irexec
 	repeat  = 2
-	config  = mpc volume -5 && ogg123 /home/pi/rpi-radio/stereo/audio-volume-change.ogg
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --volume=down
 end
 
 # Переходим на канал и говорим название станции

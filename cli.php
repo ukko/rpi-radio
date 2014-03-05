@@ -26,6 +26,8 @@ $mpg = '/usr/bin/mpg123';
  * cli.php --info=time          произнести текущее время
  * cli.php --info=track         произнести текущий трек
  * cli.php --sleep=30           поставить таймер выключения, на указанное количество минут
+ * cli.php --volume=up
+ * cli.php --volume=down
  */
 
 $mpd    = new Client('127.0.0.1');
@@ -37,6 +39,7 @@ $params = array(
     'i:'    => 'info:',
     's:'    => 'sleep:',
     'p:'    => 'play:',
+    'v:'    => 'volume:',
 );
 
 $options = getopt(implode('', array_keys($params)), $params);
@@ -61,6 +64,26 @@ if (isset($options['track']) || isset($options['t'])) {
     }
 
     nowPlaying($mpd, $mpg, $status, $playlist);
+}
+
+if (isset($options['volume']) || isset($options['v'])) {
+    $volume = isset($options['volume']) ? $options['volume'] : $options['v'];
+    $file   = __DIR__ . '/data/audio-volume-change.mp3';
+
+    if ($volume === 'down') {
+        $val = $status['volume'] - 5;
+    } else {
+        $val = $status['volume'] + 5;
+    }
+
+    if ($val <= 0 || $val >= 100) {
+        $val = ($val <= 0) ? 0 : 100;
+        $file = __DIR__ . '/data/sonar.mp3';
+    }
+
+    $mpd->send('setvol', $val);
+
+    system(sprintf('%s %s &', $mpg, $file));
 }
 
 if (isset($options['info']) || isset($options['i'])) {
