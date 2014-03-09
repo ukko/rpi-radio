@@ -49,7 +49,7 @@ begin
 	button  = KEY_PLAYPAUSE
 	prog    = irexec
 	repeat  = 0
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --track=stop_play
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=stop_play
 end
 
 # Громкость
@@ -72,61 +72,61 @@ end
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_0
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=0
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=0
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_1
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=1
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=1
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_2
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=2
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=2
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_3
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=3
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=3
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_4
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=4
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=4
 end
 
 begin
 	prog    = irexec
 	button  = KEY_NUMERIC_5
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=5
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=5
 end
 
 begin
 	prog    = irexec
 	button  = KEY_6
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=6
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=6
 end
 
 begin
 	prog    = irexec
 	button  = KEY_7
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=7
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=7
 end
 
 begin
 	prog    = irexec
 	button  = KEY_8
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=8
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=8
 end
 
 begin
 	prog    = irexec
 	button  = KEY_9
-	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --play=9
+	config  = /usr/bin/php /home/pi/rpi-radio/cli.php --playback=play --number=9
 end
 
 end irexec
