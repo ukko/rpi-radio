@@ -425,7 +425,6 @@ class Client
      */
     public function playOrStop()
     {
-        var_dump($this->status('state'));
         if ($this->status('state') === 'play') {
             $result = $this->stop();
         } else {
