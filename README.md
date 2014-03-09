@@ -21,4 +21,6 @@ Commands
 Third-party components
 ______________________
 
-Sound files are from "Gnome Sound Theme"
+ * Sound files are from "Gnome Sound Theme"
+ * MPD client fork from https://github.com/mutantlabs/SimpleMPDWrapper
+ * Idea from http://kostya-ov.webnode.ru/news/proverka-dobavleniya-audio-fajla/
